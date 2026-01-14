@@ -1,0 +1,18 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  position: relative;
+}
+
+.menu li {
+  padding:5px 10px;
+}
+.menu li :hover {
+  background: #898989;
+}

@@ -1,16 +1,14 @@
 import path from "path"
 import multer from "multer"
 
-const upload =multer({
-    dest:"uploads/",
-    limits:{ fileSize:50*1024*1024},//50mb
-    storage:multer.diskStorage({
+const storage = multer.diskStorage({
     destination:"uploads/" ,
     filename:   (_req,file,cb)=>{
         cb(null,file.originalname)
     },
-}),
-fileFilter:(_req, file, cb) =>{
+})
+
+const fileFilter = (_req, file, cb) =>{
     let ext = path.extname(file.originalname);
 
     if(
@@ -24,7 +22,13 @@ fileFilter:(_req, file, cb) =>{
         return;
     }
     cb(null,true);
-},
+}
+
+const upload =multer({
+
+    limits:{ fileSize:50*1024*1024},//50mb
+    storage,
+    fileFilter
 })
 
 export default upload;

@@ -115,7 +115,7 @@ try {
 }
 const logout = (req,res)=>{
   
-    register.cookie("token",null,{
+    res.cookie("token",null,{
         secure:false,
         httpOnly:true,
         maxAge:0
