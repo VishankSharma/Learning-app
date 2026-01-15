@@ -26,8 +26,8 @@ const HomeLayout = ({ children }) => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-700 flex flex-col">
-            <div className="drawer fixed z-50">
+        <div className="min-h-screen bg-gradient-to-br from-[#1f2937] via-[#111827] to-[#020617] flex flex-col">
+            <div className="drawer fixed z-50 ">
                 <input id="my-drawer-1" type="checkbox" className="drawer-toggle" />
                 <div className="drawer-content">
                     {/* Page content here */}
