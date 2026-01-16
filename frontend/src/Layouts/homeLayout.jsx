@@ -3,6 +3,7 @@ import { RxCrossCircled } from "react-icons/rx";
 import Footer from "../Components/Footer";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux'
+import { logout } from "../Redux/Slices/AuthSlice";
 
 const HomeLayout = ({ children }) => {
 
@@ -17,11 +18,11 @@ const HomeLayout = ({ children }) => {
         element[0].checked = false
     }
 
-    function handleLogout (e){
+async function handleLogout (e){
         e.preventDefault();
 
-        // const res = await dispatch(logout());
-        // if(res?.payload?.success)
+        const res = await dispatch(logout());
+        if(res?.payload?.res === 'success')
         navigate('/');
     }
 
@@ -54,24 +55,32 @@ const HomeLayout = ({ children }) => {
                         { 
                          !isLoggedIn && (
                             <div className="flex items-center justify-center w-full gap-4 absolute bottom-5 left-0">
-                                <button className="px-4 py-1 font-semibold text-xl rounded-lg bg-blue-500 hover:bg-blue-700 hover:cursor-pointer border-2 border-blue-500">
+                                <Link to="/signin">
+                                   <button className="px-4 py-1 font-semibold text-xl rounded-lg bg-blue-500 hover:bg-blue-700 hover:cursor-pointer border-2 border-blue-500">
                                     Sign In
                                 </button>
-                                <button className="px-4 py-1 font-semibold text-xl rounded-lg hover:bg-blue-600 border-2 border-blue-500 hover:cursor-pointer">
+                                </Link>
+                                <Link to="/signup">
+                                   <button className="px-4 py-1 font-semibold text-xl rounded-lg hover:bg-blue-600 border-2 border-blue-500 hover:cursor-pointer">
                                     Sign Up
                                 </button>
+                                </Link>
                             </div>
                          )
                         }
                         { 
                          isLoggedIn && (
                             <div className="flex items-center justify-center w-full gap-4 absolute bottom-5 left-0">
-                                <button className="px-4 py-1 font-semibold text-xl rounded-lg bg-blue-500 hover:bg-blue-700 hover:cursor-pointer border-2 border-blue-500">
+                                <Link to="/profile">
+                                   <button className="px-4 py-1 font-semibold text-xl rounded-lg bg-blue-500 hover:bg-blue-700 hover:cursor-pointer border-2 border-blue-500">
                                     Profile
                                 </button>
-                                <button onClick={handleLogout} className="px-4 py-1 font-semibold text-xl rounded-lg hover:bg-blue-600 border-2 border-blue-500 hover:cursor-pointer">
+                                </Link>
+                                <Link to="/signout">
+                                  <button onClick={handleLogout} className="px-4 py-1 font-semibold text-xl rounded-lg hover:bg-blue-600 border-2 border-blue-500 hover:cursor-pointer">
                                     Sign Out
                                 </button>
+                                </Link>
                             </div>
                          )
                         }
