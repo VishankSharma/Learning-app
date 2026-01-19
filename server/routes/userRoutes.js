@@ -3,9 +3,10 @@ const router = express.Router()
 import {register,login,logout,getprofile,forgotPassword,resetPassword, changePassword, updateUser} from '../controllers/user.controller.js'
 import {isLoggedIn} from '../middlewares/auth.middleware.js'
 import upload from '../middlewares/multer.middleware.js'
+import { loginLimiter } from '../middlewares/rateLimit.middleware.js'
 
 router.post('/register',upload.single("avatar"),register)
-router.post('/login',login)
+router.post('/login',loginLimiter,login)
 router.get('/logout',logout)
 router.get('/me',isLoggedIn,getprofile)
 router.post('/reset',forgotPassword)

@@ -7,9 +7,7 @@ const router = Router()
 
 router.route('/')
 .get(getAllCourses)
-.post(isLoggedIn,authorizedRoles('ADMIN'),upload.single('thumbnail'),createCourse)
-
-
+.post(isLoggedIn,authorizedRoles('ADMIN','INSTRUCTOR'),upload.single('thumbnail'),createCourse)
 router.route('/:id')
 .get(isLoggedIn,authorizeSubscriber,getLecturesByCourseId)
 .put(isLoggedIn,authorizedRoles('ADMIN'),updateCourse)

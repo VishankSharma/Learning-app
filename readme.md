@@ -2,7 +2,10 @@
 
 A full-stack Learning Management System (LMS) built using MERN Stack with authentication, role-based access, course management, and responsive UI.
 
+-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------
 🚀 Features
+
 👤 Authentication & Authorization
 
 User Signup with avatar upload
@@ -29,6 +32,9 @@ Cloud storage with Cloudinary
 
 Image preview before upload
 
+-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------
+
 🎨 Frontend
 
 Built with React + Vite
@@ -47,29 +53,17 @@ Redux Toolkit
 
 Auth Slice for login/signup/logout
 
+-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------
+
 🛠️ Tech Stack
 
 Frontend --> React, React Router DOM, Redux Toolkit ,Axios, Tailwind CSS, DaisyUI, React Icons, React Hot Toast
 
 Backend --> Node.js, Express.js, MongoDB, Mongoose, JWT, Bcrypt, Multer, Cloudinary
 
-📂 Project Structure
-├── frontend
-│   ├── src
-│   │   ├── Components
-│   │   ├── Layouts
-│   │   ├── Pages
-│   │   ├── Redux
-│   │   ├── utils
-│   │   └── App.jsx
-│
-├── server
-│   ├── controllers
-│   ├── routes
-│   ├── models
-│   ├── middlewares
-│   ├── config
-│   └── server.js
+-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------
 
 ⚙️ Environment Variables
 
@@ -83,6 +77,8 @@ CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
 
+-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------
 ▶️ How to Run Locally
 
 1️⃣ Clone Repository
@@ -108,19 +104,7 @@ Backend will run on:
 
 http://localhost:5000
 
-🔐 Authentication Flow
-
-User registers with avatar
-
-Password is hashed using bcrypt
-
-JWT token is generated
-
-Token stored in HTTP-only cookie
-
-Protected routes validated via middleware
-
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 🤝 Contributing
 
 Contributions are welcome!
@@ -132,6 +116,7 @@ Create your branch (feature/your-feature)
 Commit changes
 
 Push & create Pull Request
+
 
 🧑‍💻 Author
 

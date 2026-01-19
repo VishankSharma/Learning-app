@@ -2,11 +2,12 @@ import Course from '../models/course.model.js';
 import AppError from '../utils/error.util.js';
 import fs from 'fs/promises';
 import cloudinary from 'cloudinary';
+import { userInfo } from 'os';
 
 const getAllCourses = async (req, res, next) => {
   
   try {
-    const courses = await Course.find({});
+    const courses = await Course.find({}).populate("instructor","name bio skills avatar");
     console.log(courses)
 
     return res.status(200).json({
@@ -15,7 +16,7 @@ const getAllCourses = async (req, res, next) => {
       courses:courses
     });
   } catch (e) {
-    return next(new AppError('Failed to get all courses', 404));
+    return next(new AppError('Failed to get all courses', 500));
   }
 };
 
@@ -46,18 +47,30 @@ const createCourse = async (req, res, next) => {
       title,
       description,
       category,
-      createdBy
+      price,
+      language,
+      level,
     } = req.body;
 
-          if(!title || !description || !category || !createdBy){
+    let parsedWhatYouWillLearn = req.body.whatYouWillLearn;
+
+    if(!title || !description || !category ){
         return next(new AppError('Please fill in all fields', 400));
       }
 
+    if(typeof parsedWhatYouWillLearn ==='string'){
+       parsedWhatYouWillLearn = JSON.parse(parsedWhatYouWillLearn);
+    }
+    
     const course = await Course.create({
       title,
       description,
       category,
-      createdBy,
+      instructor:req.user.id,
+      price,
+      language,
+      level,
+      whatYouWillLearn: parsedWhatYouWillLearn,
       thumbnail:{
         public_id:"dummy",
         secure_url:"dummy"

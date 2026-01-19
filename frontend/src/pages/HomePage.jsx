@@ -19,7 +19,7 @@ const HomePage = () => {
                         </p>
                         
                         <div className="space-x-6">
-                           <Link>
+                           <Link to='/courses'>
                               <button className="bg-yellow-500 px-5 py-3 rounded-md font-semibold text-lg hover:bg-yellow-600 cursor-pointer">
                                 Explore courses
                               </button>

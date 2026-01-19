@@ -33,13 +33,13 @@ export const login = createAsyncThunk("/auth/signin", async (data) => {
             success: (data) => {
                 return data?.data?.message
             },
-            error: "Failed to create account"
+            error: "Failed to Login"
         })
 
         return (await res).data
     } catch (error) {
         toast.error(error?.response?.data?.message)
-        return rejectWithValue(error?.response?.data);
+        return ;
     }
 })
 export const logout = createAsyncThunk("/auth/signout", async () => {

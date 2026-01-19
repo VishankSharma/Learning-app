@@ -13,7 +13,7 @@ const AboutUs = () => {
                                 Affordable and quality education
                             </h1>
                             <p className="text-xl text-gray-200">
-                                aur goal is to providethe affordable and quality education to the word.
+                                aur goal is to providethe affordable and quality education to the world.
                                 we are providing the plateform for the aspiring teacher and students to share
                                 their skills,creativity and knowledge to each other to empower in the growth and wellness of manking
                             </p>
