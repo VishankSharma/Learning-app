@@ -5,15 +5,15 @@ import cloudinary from 'cloudinary';
 import { userInfo } from 'os';
 
 const getAllCourses = async (req, res, next) => {
-  
+
   try {
-    const courses = await Course.find({}).populate("instructor","name bio skills avatar");
+    const courses = await Course.find({}).populate("instructor", "name bio skills avatar");
     console.log(courses)
 
     return res.status(200).json({
       success: true,
       message: 'Successfully fetched all courses',
-      courses:courses
+      courses: courses
     });
   } catch (e) {
     return next(new AppError('Failed to get all courses', 500));
@@ -54,148 +54,156 @@ const createCourse = async (req, res, next) => {
 
     let parsedWhatYouWillLearn = req.body.whatYouWillLearn;
 
-    if(!title || !description || !category ){
-        return next(new AppError('Please fill in all fields', 400));
-      }
-
-    if(typeof parsedWhatYouWillLearn ==='string'){
-       parsedWhatYouWillLearn = JSON.parse(parsedWhatYouWillLearn);
+    if (!title || !description || !category) {
+      return next(new AppError('Please fill in all fields', 400));
     }
-    
+
+    if (typeof parsedWhatYouWillLearn === "string") {
+      try {
+        // Try JSON parse first
+        parsedWhatYouWillLearn = JSON.parse(parsedWhatYouWillLearn);
+      } catch {
+        // Fallback: comma separated
+        parsedWhatYouWillLearn = parsedWhatYouWillLearn
+          .split(",")
+          .map(item => item.trim());
+      }
+    }
+
     const course = await Course.create({
       title,
       description,
       category,
-      instructor:req.user.id,
+      instructor: req.user.id,
       price,
       language,
       level,
       whatYouWillLearn: parsedWhatYouWillLearn,
-      thumbnail:{
-        public_id:"dummy",
-        secure_url:"dummy"
+      thumbnail: {
+        public_id: "dummy",
+        secure_url: "dummy"
       }
-      });
-     
-    if(!course){
-     return next(new AppError('course could not created,please try again',500))
+    });
+
+    if (!course) {
+      return next(new AppError('course could not created,please try again', 500))
     }
 
-  if(req.file){
-    const result = await cloudinary.v2.uploader.upload(req.file.path,{
-      folder: 'lms',
-    })
+    if (req.file) {
+      const result = await cloudinary.v2.uploader.upload(req.file.path, {
+        folder: 'lms',
+      })
 
-   if(result){
-    course.thumbnail.public_id = result.public_id
-    course.thumbnail.secure_url = result.secure_url
-   }
+      if (result) {
+        course.thumbnail.public_id = result.public_id
+        course.thumbnail.secure_url = result.secure_url
+      }
 
-  fs.rm(`uploads/${req.file.filename}`)
-  }
+      fs.rm(`uploads/${req.file.filename}`)
+    }
 
-  await course.save()
+    await course.save()
 
-   res.status(201).json({
+    res.status(201).json({
       success: true,
       message: 'Course inserted successfully',
-      course:course
+      course: course
     });
 
   } catch (error) {
-  return next(new AppError(error.message,400));
+    return next(new AppError(error.message, 400));
   }
 };
 
-const updateCourse = async (req,res,next)=>{
+const updateCourse = async (req, res, next) => {
   try {
-  const {id} = req.params;
-  const course = await Course.findByIdAndUpdate(id,{
-    $set:req.body
-  },{
-    runValidators:true
-  });
+    const { id } = req.params;
+    const course = await Course.findByIdAndUpdate(id, {
+      $set: req.body
+    }, {
+      runValidators: true
+    });
 
-  if(!course){
-    return next(new AppError('Course not found',404))
-  }
+    if (!course) {
+      return next(new AppError('Course not found', 404))
+    }
 
-  res.status(200).json({
-    success:true,
-    message:'Course updated successfully',
-    course:course
-  })
-    
+    res.status(200).json({
+      success: true,
+      message: 'Course updated successfully',
+      course: course
+    })
+
   } catch (e) {
-    return next(new AppError(e.message,400));
+    return next(new AppError(e.message, 400));
   }
 }
 
-const removeCourse = async (req,res,next)=>{
-try {
-  const {id} = req.params;
-  const course = await Course.findById(id);
+const removeCourse = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const course = await Course.findById(id);
 
-  if(!course){
-    return next(new AppError('Course does not exist',404))
+    if (!course) {
+      return next(new AppError('Course does not exist', 404))
+    }
+
+    await Course.findByIdAndDelete(id);
+
+    res.status(200).json({
+      success: true,
+      message: 'Course removed successfully',
+    })
+  } catch (e) {
+    return next(new AppError(e.message, 400));
   }
-
-  await Course.findByIdAndDelete(id);
-
-  res.status(200).json({
-    success:true,
-    message:'Course removed successfully', 
-  })
-} catch (e) {
-  return next(new AppError(e.message,400));
-}
 }
 
-const addLectureToCoureById = async(req,res,next)=>{
-   const {title,description} = req.body
-   const {id} = req.params
+const addLectureToCoureById = async (req, res, next) => {
+  const { title, description } = req.body
+  const { id } = req.params
 
-   if(!title || !description){
-    return next(new AppError('Please provide both title and description',400))
-   }
+  if (!title || !description) {
+    return next(new AppError('Please provide both title and description', 400))
+  }
 
   const course = await Course.findById(id)
 
-  if(!course){
-    return next(new AppError('Course does not exist',404))
+  if (!course) {
+    return next(new AppError('Course does not exist', 404))
   }
 
   const lectureData = {
     title,
     description,
-    lecture:{}
+    lecture: {}
 
   }
 
-  if(req.file){
-    const result = await cloudinary.v2.uploader.upload(req.file.path,{
+  if (req.file) {
+    const result = await cloudinary.v2.uploader.upload(req.file.path, {
       folder: 'lms',
-  })
+    })
 
-  if(result){
-    lectureData.lecture.public_id = result.public_id
-    lectureData.lecture.secure_url=result.secure_url
+    if (result) {
+      lectureData.lecture.public_id = result.public_id
+      lectureData.lecture.secure_url = result.secure_url
+    }
+    fs.rm(`uploads/${req.file.filename}`)
+
   }
-  fs.rm(`uploads/${req.file.filename}`)
 
- }
+  course.lectures.push(lectureData)
 
- course.lectures.push(lectureData)
+  course.numberOfLectures = course.lectures.length
 
- course.numberOfLectures = course.lectures.length
+  await course.save()
 
- await course.save()
-
- res.status(200).json({
- success:true,
- message:'Lecture added successfully',
- course
- })
+  res.status(200).json({
+    success: true,
+    message: 'Lecture added successfully',
+    course
+  })
 }
 
 

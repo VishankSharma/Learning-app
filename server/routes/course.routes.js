@@ -12,6 +12,6 @@ router.route('/:id')
 .get(isLoggedIn,authorizeSubscriber,getLecturesByCourseId)
 .put(isLoggedIn,authorizedRoles('ADMIN'),updateCourse)
 .delete(isLoggedIn,authorizedRoles('ADMIN'),removeCourse)
-.post(isLoggedIn,authorizedRoles('ADMIN'),upload.single('lecture'),addLectureToCoureById)
+.post(isLoggedIn,authorizedRoles('ADMIN','INSTRUCTOR'),upload.single('lecture'),addLectureToCoureById)
 
 export default router
